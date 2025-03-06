@@ -1,0 +1,90 @@
+[
+  {
+    "id": "1",
+    "fullName": "Juan Perez Ibañez",
+    "birth": "2001-12-26T00:00:00.000Z",
+    "email": "jperez@emailficticio.com",
+    "direcciones": [
+      {
+        "id": "234",
+        "calle": "Alameda",
+        "numero": "234",
+        "comuna": "",
+        "defaultAddress": true
+      },
+      {
+        "id": "2346",
+        "calle": "San Ignacio",
+        "numero": "2346",
+        "comuna": "",
+        "defaultAddress": false
+      },
+      {
+        "id": "1000",
+        "calle": "Berlin",
+        "numero": "1000",
+        "comuna": "",
+        "defaultAddress": false
+      },
+      {
+        "id": "258",
+        "calle": "Victoria",
+        "numero": "258",
+        "comuna": "",
+        "defaultAddress": false
+      }
+    ]
+  },
+  {
+    "id":  "2",
+    "fullName": "Martina Echaurren Soto",
+    "birth": "1981-02-11T00:00:00.000Z",
+    "email": "mesoto@emailficticio.com",
+    "direcciones": [
+      {
+        "id": "44",
+        "calle": "Republica",
+        "numero": "4",
+        "comuna": "",
+        "defaultAddress": true
+      }
+    ]
+  },
+  {
+    "id":  "3",
+    "fullName": "Jose Jimenez Torres",
+    "birth": "1994-11-22T00:00:00.000Z",
+    "email": null,
+    "direcciones": [
+      {
+        "id": "55",
+        "calle": "Calle Bonita",
+        "numero": "456",
+        "comuna": "",
+        "defaultAddress": true
+      }
+    ]
+  },
+  {
+    "id":  "4",
+    "fullName": "Mauricio Sandoval Alvarez",
+    "birth": "2001-12-26T00:00:00.000Z",
+    "email": "msandoval@emailficticio.com",
+    "direcciones": [
+      {
+        "id": "345",
+        "calle": "Calle Uno",
+        "numero": "345",
+        "comuna": "",
+        "defaultAddress": true
+      },
+      {
+        "id": "123",
+        "calle": "Canada",
+        "numero": "123",
+        "comuna": "",
+        "defaultAddress": false
+      }
+    ]
+  }
+]
