@@ -41,7 +41,7 @@ export default function UsersTable() {
     if (isSuccess) console.log(data);
     if (isError) {
       toast.error('Error al cargar datos');
-      toast.success('Datos cargados de archivo-mock');
+      toast.success('Datos cargados desde un archivo-mock');
     }
 
     dispatch(setDataForTableInErrorCase(mockData));

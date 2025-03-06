@@ -2,11 +2,11 @@ import { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { TUserDireccion } from '@/api/api.types';
 import { Checkbox } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeDefaultAddress, currenDireccionesListSelect } from '@/components/componentsStore';
+import { changeDefaultAddress, currentDireccionesListSelect } from '@/components/componentsStore';
 import { ChangeEvent, useEffect, useState } from 'react';
 
 const RenderCheckbox = (params: GridCellParams<TUserDireccion>) => {
-  const direcciones = useSelector(currenDireccionesListSelect);
+  const direcciones = useSelector(currentDireccionesListSelect);
   const [checked, setChecked] = useState<boolean>(false);
   const dispatch = useDispatch();
 

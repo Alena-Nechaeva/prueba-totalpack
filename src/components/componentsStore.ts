@@ -7,7 +7,7 @@ type TInitialState = {
   isEditMode: boolean;
   currentUser: TUserData | null;
   dataUsers: TUserData[];
-  currenDireccionesList: TUserDireccion[];
+  currentDireccionesList: TUserDireccion[];
 };
 
 const initialState: TInitialState = {
@@ -15,7 +15,7 @@ const initialState: TInitialState = {
   isEditMode: false,
   currentUser: null,
   dataUsers: [],
-  currenDireccionesList: [],
+  currentDireccionesList: [],
 };
 
 export const usersSlice = createSlice({
@@ -37,23 +37,20 @@ export const usersSlice = createSlice({
     setCurrentUser: (state, action: PayloadAction<TUserData>) => {
       state.currentUser = action.payload;
     },
-    setCurrenDireccionesList: (state, action: PayloadAction<TUserDireccion[]>) => {
-      state.currenDireccionesList = action.payload;
+    setcurrentDireccionesList: (state, action: PayloadAction<TUserDireccion[]>) => {
+      state.currentDireccionesList = action.payload;
     },
     addDireccionToList: (state, action: PayloadAction<TUserDireccion>) => {
-      state.currenDireccionesList = [...state.currenDireccionesList, action.payload];
+      state.currentDireccionesList = [...state.currentDireccionesList, action.payload];
     },
     changeDefaultAddress: (state, action: PayloadAction<{ id: string; checked: boolean }>) => {
-      const copy = state.currenDireccionesList;
-      copy.forEach(elem => (elem.defaultAddress = false));
-      const dirIndex = state.currenDireccionesList.findIndex(el => el.id === action.payload.id);
-      if (dirIndex !== -1) {
-        copy[dirIndex].defaultAddress = action.payload.checked;
-        state.currenDireccionesList = copy;
-      }
+      state.currentDireccionesList = state.currentDireccionesList.map(el => ({
+        ...el,
+        defaultAddress: el.id === action.payload.id ? action.payload.checked : false
+      }));
     },
     clearDireccionesList: state => {
-      state.currenDireccionesList = [];
+      state.currentDireccionesList = [];
     },
     removeUser: (state, action: PayloadAction<string>) => {
       const copy = state.dataUsers;
@@ -61,9 +58,11 @@ export const usersSlice = createSlice({
     },
     replaceUser: (state, action: PayloadAction<TUserData>) => {
       const userIndex = state.dataUsers.findIndex(el => el.id === action.payload.id);
-      const copy = state.dataUsers;
-      copy[userIndex] = action.payload;
-      state.dataUsers = copy;
+      if (userIndex !== -1) {
+        state.dataUsers = state.dataUsers.map((user, index) =>
+          index === userIndex ? action.payload : user
+        );
+      }
     }
   },
 });
@@ -78,14 +77,14 @@ export const {
   changeDefaultAddress,
   clearDireccionesList,
   setCurrentUser,
-  setCurrenDireccionesList,
+  setcurrentDireccionesList,
   replaceUser
 } = usersSlice.actions;
 
 export const isUserModalOpenSelect = (state: RootState) => state.users.isUserModalOpen;
 export const isEditModeSelect = (state: RootState) => state.users.isEditMode;
 export const dataUsersSelect = (state: RootState) => state.users.dataUsers;
-export const currenDireccionesListSelect = (state: RootState) => state.users.currenDireccionesList;
+export const currentDireccionesListSelect = (state: RootState) => state.users.currentDireccionesList;
 export const currentUserSelect = (state: RootState) => state.users.currentUser;
 
 export default usersSlice.reducer;

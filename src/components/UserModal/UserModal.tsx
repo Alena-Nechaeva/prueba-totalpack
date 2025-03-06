@@ -19,11 +19,11 @@ import { LoadingButton } from '@mui/lab';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   addUser,
-  currenDireccionesListSelect,
+  currentDireccionesListSelect,
   currentUserSelect,
   isEditModeSelect,
   replaceUser,
-  setCurrenDireccionesList,
+  setcurrentDireccionesList,
 } from '@/components/componentsStore';
 import CloseIcon from '@/components/icons/CloseIcon';
 import DireccionesTable from '@/components/DireccionesTable/DireccionesTable';
@@ -31,6 +31,7 @@ import AppReactDatepicker from '@/components/UserModal/DatePicker/AppReactDatepi
 import NewDireccionModal from '@/components/DireccionesTable/NewDireccionModal/NewDireccionModal';
 import { generateRandomString } from '@/utils/generateRandomString';
 import { useAddUserMutation } from '@/api/api';
+import {useSendEmailMutation} from "@/api/sendEmail.api";
 
 const schema = yup.object().shape({
   fullName: yup.string().required('Nombre es requerido'),
@@ -49,7 +50,7 @@ const schema = yup.object().shape({
 
 export default function UserModal({ onClose }: { onClose: () => void }) {
   const isEditMode = useSelector(isEditModeSelect);
-  const direcciones = useSelector(currenDireccionesListSelect);
+  const direcciones = useSelector(currentDireccionesListSelect);
   const currentUser = useSelector(currentUserSelect);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [direccionModalOpen, setDireccionModalOpen] = useState<boolean>(false);
@@ -59,6 +60,7 @@ export default function UserModal({ onClose }: { onClose: () => void }) {
     control,
     handleSubmit,
     setValue,
+    getValues,
     clearErrors,
     formState: { errors },
   } = useForm<yup.InferType<typeof schema>>({
@@ -69,6 +71,16 @@ export default function UserModal({ onClose }: { onClose: () => void }) {
   const handleCloseDirModal = () => setDireccionModalOpen(false);
 
   const [addUserToDB] = useAddUserMutation();
+  const [sendEmail] = useSendEmailMutation();
+  const handleSendEmail = async () => {
+    try {
+      await sendEmail({ to: getValues('email'), body: `¡Bienvenido ${getValues('fullName')} al sistema!` }).unwrap();
+      toast.success('Email enviado con éxito');
+    } catch (error) {
+      toast.error('Error al enviar el email');
+    }
+  };
+
   const onSubmit: SubmitHandler<yup.InferType<typeof schema>> = async params => {
     setLoadingBtnState(true);
     if (isEditMode && currentUser) {
@@ -81,10 +93,11 @@ export default function UserModal({ onClose }: { onClose: () => void }) {
     try {
       await addUserToDB({ body: { ...params, id: generateRandomString() } }).unwrap();
       toast.success('Usuario añadido con éxito');
+      await handleSendEmail();
     } catch (err: unknown) {
       console.log(err);
       toast.error('Error al añadir usuario');
-      toast.success('User añadido al Redux Store con éxito');
+      toast.success('Usuario añadido al Redux Store con éxito');
     } finally {
       setLoadingBtnState(false);
     }
@@ -99,7 +112,7 @@ export default function UserModal({ onClose }: { onClose: () => void }) {
     if (isEditMode && currentUser) {
       const birthDay = currentUser.birth?.split('T')[0];
       setStartDate(currentUser.birth ? new Date(birthDay + 'T12:00:00') : new Date());
-      dispatch(setCurrenDireccionesList(currentUser.direcciones ? currentUser.direcciones : []));
+      dispatch(setcurrentDireccionesList(currentUser.direcciones ? currentUser.direcciones : []));
       setValue('fullName', currentUser.fullName);
       setValue('birth', startDate ? startDate.toISOString() : '');
       setValue('email', currentUser.email ? currentUser.email : '');

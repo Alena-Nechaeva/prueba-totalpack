@@ -18,21 +18,18 @@ import { LoadingButton } from '@mui/lab';
 import CloseIcon from '@/components/icons/CloseIcon';
 import { generateRandomString } from '@/utils/generateRandomString';
 import {useDispatch, useSelector} from 'react-redux';
-import {addDireccionToList, currenDireccionesListSelect} from '@/components/componentsStore';
+import {addDireccionToList, currentDireccionesListSelect} from '@/components/componentsStore';
 
 const schema = yup.object().shape({
   calle: yup.string().required('El nombre de la calle es requerido'),
   numero: yup.string()
-    .matches(/^\d+$/, 'Solo se permiten números')
-    .required('El número es requerido')
-    .test('is-positive', 'El número debe ser mayor a 0', (value) =>
-      Number(value) > 0
-    ),
+    .matches(/^[a-zA-Z\d]+$/, 'Solo se permiten números y letras')
+    .required('El número es requerido'),
   comuna: yup.string(),
 });
 
 export default function NewDireccionModal({ onClose }: { onClose: () => void }) {
-  const direcciones = useSelector(currenDireccionesListSelect)
+  const direcciones = useSelector(currentDireccionesListSelect)
   const [loadingBtnState, setLoadingBtnState] = useState<boolean>(false);
   const dispatch = useDispatch();
   const {
